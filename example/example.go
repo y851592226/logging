@@ -1,6 +1,6 @@
 package main
 
-import "logging"
+import "github.com/y851592226/logging"
 
 var handlerConfig = logging.Config{
     Handlers: map[string]map[string]string{

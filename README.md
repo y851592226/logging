@@ -26,7 +26,7 @@ logging 是一个基于[Go](http://golang.org/)的日志库，类似于**python*
 
 安装FileLogger使用"go get"命令
     
-    go get github.com/aiwuTech/fileLogger
+    go get github.com/y851592226/logging
     
 只基于[Go](http://golang.org/)标准库，不依赖第三方库
 
@@ -83,11 +83,11 @@ func main() {
 
 ## FAQ
 
-如果使用过程中遇到任何问题，希望主动与我(851592226@qq.com)联系，也可提交[Issues](https://github.com/aiwuTech/fileLogger/issues)，我会及时解决和回复
+如果使用过程中遇到任何问题，希望主动与我(851592226@qq.com)联系，也可提交[Issues](https://github.com/y851592226/logging/issues)，我会及时解决和回复
 
 
 
-##License
+## License
 
 
 FileLogger基于 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
