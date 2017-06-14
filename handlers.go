@@ -12,6 +12,7 @@ import "time"
 import "path/filepath"
 import "sort"
 import "regexp"
+import "reflect"
 
 type LogHandler interface {
 	writeLog(name string, logLevel LogLevel, format string, v ...interface{})
@@ -382,14 +383,42 @@ func (handler *TimeRotatingHandler) setOut() (err error) {
 		if err != nil {
 			return
 		}
-		stat, err1 := os.Stat(filepath)
-		if err1 != nil {
-			err = err1
+		handler.createTime,err = GetBirthtime(filepath)
+		if err != nil {
 			return
 		}
-		handler.createTime = time.Unix(stat.Sys().(*syscall.Stat_t).Birthtimespec.Sec, 0)
 	}
 	return
+}
+
+func getField(stat syscall.Stat_t,name string) (result syscall.Timespec,ok bool){
+    t := reflect.TypeOf(stat)
+    _,ok = t.FieldByName(name)
+    if !ok{
+        return
+    }
+    v := reflect.ValueOf(stat)
+    v = v.FieldByName(name)
+    result = (v.Interface()).(syscall.Timespec)
+    return
+}
+
+func GetBirthtime(fileName string)(t time.Time, err error){
+    fileInfo, err := os.Stat(fileName)
+    if err!=nil{
+        return
+    }
+    stat := fileInfo.Sys().(*syscall.Stat_t)
+    timeName :=[]string{"Birthtimespec","Ctim","Ctimespec"}
+    for _,name := range timeName{
+        result,ok:=getField(*stat,name)
+        if ok{
+            t=time.Unix(result.Sec,0)
+            return
+        }
+    }
+    t=time.Now()
+    return
 }
 
 func (handler *TimeRotatingHandler) writeLog(name string, logLevel LogLevel, format string, v ...interface{}) {
